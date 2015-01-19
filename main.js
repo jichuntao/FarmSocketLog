@@ -23,7 +23,7 @@ if (cluster.isMaster) {
 	Object.keys(cluster.workers).forEach(function(id) {
     		cluster.workers[id].on('message', function(msg)	{
 			console.log(msg);
-			//log.send(msg);
+			log.send(msg);
 		});
   	});
 	//startlog function
