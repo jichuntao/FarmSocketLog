@@ -25,7 +25,7 @@ function wirteLog(){
 		if(!logObj[obj.lang]){
 			logObj[obj.lang]='test';
 		}
-		fs.appendFile(getLogPath(datePath,obj.lang)+obj.uid+'.log',obj.time+'-'+obj.logmsg+'\n',function(err){
+		fs.appendFile(getLogPath(datePath,obj.lang)+obj.uid+'.log',obj.time+'-'+obj.msg+'\n',function(err){
 				if(err){console.log(err)};
 		});
 	}
