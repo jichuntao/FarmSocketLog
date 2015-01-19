@@ -67,6 +67,7 @@ function start(port){
 				sendLogMessage(uid,lang,data);
 			}
 			else if(data.indexOf('<policy-file-request/>')==0){
+				clearTimeout(timeout);
 				state='sandbox';
 				c.end(xml);
 				return;
