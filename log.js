@@ -2,7 +2,7 @@ var fs = require('fs');
 
 var LOG_SAVE_DELAY=5000;
 
-var logFilePath='/mnt/farmweblog3/';
+var logFilePath='/mnt/farmSocketLog/';
 
 var logBuff= [];
 var dirTemp= {};
