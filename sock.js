@@ -13,10 +13,12 @@ function start(port){
 		var lang;
         var tempData;
         var loginTime;
+        /*
         var timeout = setTimeout(function(){
         	state ='timeout';
         	closeSocket('timeout');
         },12000);
+		*/
 		c.setEncoding('utf8');
 
         c.on('end', function() {
@@ -30,7 +32,7 @@ function start(port){
 
         c.on('data',function(data){
 			if(data.indexOf('login:')==0){
-				clearTimeout(timeout);
+				//clearTimeout(timeout);
 				var loginDataArr=data.split('login:');
 				if(loginDataArr.length!=2 ){
 					closeSocket('loginError:'+data);
@@ -67,7 +69,7 @@ function start(port){
 				sendLogMessage(uid,lang,data);
 			}
 			else if(data.indexOf('<policy-file-request/>')==0){
-				clearTimeout(timeout);
+				//clearTimeout(timeout);
 				state='sandbox';
 				c.end(xml);
 				return;
