@@ -13,6 +13,7 @@ function start(port){
 		var lang;
         var tempData;
         var loginTime;
+        var offsetTime;
         /*
         var timeout = setTimeout(function(){
         	state ='timeout';
@@ -48,7 +49,8 @@ function start(port){
 				} 
 				uid=tempData['uid'];
 				lang=tempData['lang'];
-				loginTime=new Date().getTime();
+				offsetTime=tempData['time'];
+				loginTime=new Date().getTime()-offsetTime;
 				state='login';
 				sendLogMessage(uid,lang,"{'action':'login','data':'"+netInfo+"'"+",'time':'"+tempData['time']+"'"+",'uid':'"+uid+"'"+"}");
 				c.write('ok');
