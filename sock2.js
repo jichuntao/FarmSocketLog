@@ -30,6 +30,11 @@ function start(port){
 			sendLogMessage(uid,lang,"{'action':'close','loginTime':'"+loginTime+"','endTime':"+endTime+"'}");
         });
 
+		c.on('error',function(err){
+			console.log(err);
+			console.log('-----------');
+  		));
+
         c.on('data',function(data){
 			if(data.indexOf('login:')==0){
 				//clearTimeout(timeout);

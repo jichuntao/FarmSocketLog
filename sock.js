@@ -26,47 +26,53 @@ function start(port){
 			{
 				return;
 			}
+			
 			var endTime=new Date().getTime();
-			sendLogMessage(uid,lang,"{'action':'close','loginTime':'"+loginTime+"','endTime':"+endTime+"'}");
+			var time=endTime-loginTime;
+			console.log("{'action':'close','time':'"+time+"'}");
+			sendLogMessage(uid,lang,"{'action':'close','time':'"+time+"'}");
         });
 
         c.on('data',function(data){
+        	console.log(data);
 			if(data.indexOf('login:')==0){
 				//clearTimeout(timeout);
 				var loginDataArr=data.split('login:');
 				if(loginDataArr.length!=2 ){
-					closeSocket('loginError:'+data);
+					//closeSocket('loginError:'+data);
 					return;
 				}
 				tempData=str2json(loginDataArr[1]);
 				if(tempData == null){
-					closeSocket('loginError:'+data);
+					//closeSocket('loginError:'+data);
 					return;
 				} 
 				uid=tempData['uid'];
 				lang=tempData['lang'];
-				loginTime = new Date().getTime();
+				loginTime=new Date().getTime();
 				state='login';
 				sendLogMessage(uid,lang,"{'action':'login','data':'"+netInfo+"'"+",'time':'"+tempData['time']+"'"+",'uid':'"+uid+"'"+"}");
+				c.write('ok');
 			}
 			else if(data.indexOf('logout:')==0){
 				var logoutDataArr=data.split('logout:');
 				if(logoutDataArr.length!=2 ){
-					closeSocket('logoutError:'+data);
+					//closeSocket('logoutError:'+data);
 					return;
 				}
 				tempData=str2json(logoutDataArr[1]);
 				if(tempData == null){
-					closeSocket('logoutError:'+data);
+					//closeSocket('logoutError:'+data);
 					return;
 				}
-				sendLogMessage(uid,lang,"{'action':'logout'"+",'time':'"+tempData['time']+"',lodingTime:'"+tempData['loadingtime']+"'}");
+				sendLogMessage(uid,lang,"{'action':'logout'"+",'time':'"+tempData['time']+"',loadingTime:'"+tempData['time']+"'}");
 				state='logout';
 				c.end("logout");
 			}
 			else if(uid && lang){
         		state='loading';
 				sendLogMessage(uid,lang,data);
+				c.write('ok');
 			}
 			else if(data.indexOf('<policy-file-request/>')==0){
 				//clearTimeout(timeout);
@@ -76,7 +82,7 @@ function start(port){
 			}
 			else
 			{
-				closeSocket(data);
+				return;
 			}
         });
 
