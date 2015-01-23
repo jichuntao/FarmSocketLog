@@ -2,7 +2,7 @@ var path = require('path');
 var cluster = require('cluster');
 var cp = require('child_process');
 
-var appPort = 9124;
+var appPort = 9125;
 var numCPUs = 2;
 
 if (cluster.isMaster) {
