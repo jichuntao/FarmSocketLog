@@ -65,7 +65,7 @@ function start(port){
 					//closeSocket('logoutError:'+data);
 					return;
 				}
-				sendLogMessage(uid,lang,"{'action':'logout'"+",'time':'"+tempData['time']+"',loadingTime:'"+tempData['time']+"'}");
+				sendLogMessage(uid,lang,"{'action':'logout'"+",'time':'"+tempData['time']+"'}");
 				state='logout';
 				c.end("logout");
 			}
