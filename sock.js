@@ -34,7 +34,6 @@ function start(port){
         });
 
         c.on('data',function(data){
-        	console.log(data);
 			if(data.indexOf('login:')==0){
 				//clearTimeout(timeout);
 				var loginDataArr=data.split('login:');
