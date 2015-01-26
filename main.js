@@ -12,20 +12,31 @@ if (cluster.isMaster) {
 	startLog();
 	// start worker
 	for (var i = 0; i < numCPUs; i++) {
-        	cluster.fork();
+        	var p=cluster.fork();
+        	p.on('message', function(msg)	{
+				console.log(msg);
+				log.send(msg);
+			});
 	}
 	//worker manager
     cluster.on('exit', function(worker, code, signal) {
 		var exitCode = worker.process.exitCode;
 		console.log('Worker:'+worker.process.pid+' died('+exitCode+').restart...');
      	cluster.fork();
+     	var p=cluster.fork();
+        p.on('message', function(msg){
+			console.log(msg);
+			log.send(msg);
+		});
     });
+    /*
 	Object.keys(cluster.workers).forEach(function(id) {
     		cluster.workers[id].on('message', function(msg)	{
 			console.log(msg);
 			log.send(msg);
 		});
   	});
+	*/
 	//startlog function
 	function startLog()
 	{

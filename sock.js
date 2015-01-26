@@ -33,7 +33,9 @@ function start(port){
 			console.log("{'action':'close','time':'"+time+"'}");
 			sendLogMessage(uid,lang,"{'action':'close','time':'"+time+"'}");
         });
-
+        c.on('error',function(e){
+        	console.log(uid,lang,e);
+        });
         c.on('data',function(data){
 			if(data.indexOf('login:')==0){
 				//clearTimeout(timeout);
