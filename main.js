@@ -22,7 +22,6 @@ if (cluster.isMaster) {
     cluster.on('exit', function(worker, code, signal) {
 		var exitCode = worker.process.exitCode;
 		console.log('Worker:'+worker.process.pid+' died('+exitCode+').restart...');
-     	cluster.fork();
      	var p=cluster.fork();
         p.on('message', function(msg){
 			console.log(msg);
