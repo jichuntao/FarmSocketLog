@@ -14,12 +14,7 @@ function start(port){
         var tempData;
         var loginTime;
         var offsetTime;
-        /*
-        var timeout = setTimeout(function(){
-        	state ='timeout';
-        	closeSocket('timeout');
-        },12000);
-		*/
+        
 		c.setEncoding('utf8');
 
         c.on('end', function() {
@@ -27,49 +22,60 @@ function start(port){
 			{
 				return;
 			}
-			
-			var endTime=new Date().getTime();
-			var time=endTime-loginTime;
-			console.log("{'action':'close','time':'"+time+"'}");
-			sendLogMessage(uid,lang,"{'action':'close','time':'"+time+"'}");
+			var logobj={};
+			logobj['action']='close';
+			logobj['time']=new Date().getTime()-loginTime;
+			sendLogMessage(uid,lang,JSON.stringify(logobj));
         });
+
         c.on('error',function(e){
-        	console.log(uid,lang,e);
+			var logobj={};
+			logobj['action']='error';
+			logobj['time']=new Date().getTime()-loginTime;
+			logobj['msg']=e.code;
+			sendLogMessage(uid,lang,JSON.stringify(logobj));
         });
+
         c.on('data',function(data){
 			if(data.indexOf('login:')==0){
-				//clearTimeout(timeout);
 				var loginDataArr=data.split('login:');
 				if(loginDataArr.length!=2 ){
-					//closeSocket('loginError:'+data);
 					return;
 				}
 				tempData=str2json(loginDataArr[1]);
 				if(tempData == null){
-					//closeSocket('loginError:'+data);
 					return;
 				} 
+				state='login';
 				uid=tempData['uid'];
 				lang=tempData['lang'];
 				offsetTime=tempData['time'];
 				loginTime=new Date().getTime()-offsetTime;
-				state='login';
-				sendLogMessage(uid,lang,"{'action':'login','data':'"+netInfo+"'"+",'time':'"+tempData['time']+"'"+",'uid':'"+uid+"'"+"}");
+
+				var logobj={};
+				logobj['action']='login';
+				logobj['data']=netInfo;
+				logobj['time']=offsetTime;
+				logobj['uid']=uid;
+				sendLogMessage(uid,lang,JSON.stringify(logobj));
+
 				c.write('ok');
 			}
 			else if(data.indexOf('logout:')==0){
 				var logoutDataArr=data.split('logout:');
 				if(logoutDataArr.length!=2 ){
-					//closeSocket('logoutError:'+data);
 					return;
 				}
 				tempData=str2json(logoutDataArr[1]);
 				if(tempData == null){
-					//closeSocket('logoutError:'+data);
 					return;
 				}
-				sendLogMessage(uid,lang,"{'action':'logout'"+",'time':'"+tempData['time']+"'}");
 				state='logout';
+				var logobj={};
+				logobj['action']='logout';
+				logobj['time']=tempData['time'];
+				sendLogMessage(uid,lang,JSON.stringify(logobj));
+
 				c.end("logout");
 			}
 			else if(uid && lang){
@@ -78,7 +84,6 @@ function start(port){
 				c.write('ok');
 			}
 			else if(data.indexOf('<policy-file-request/>')==0){
-				//clearTimeout(timeout);
 				state='sandbox';
 				c.end(xml);
 				return;
@@ -115,5 +120,4 @@ function start(port){
 	}
 }
 
-//start(8800);
 exports.start=start;
