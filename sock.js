@@ -14,7 +14,7 @@ function start(port){
         var tempData;
         var loginTime;
         var offsetTime;
-        
+
 		c.setEncoding('utf8');
 
         c.on('end', function() {
@@ -104,20 +104,27 @@ function start(port){
         server.listen(port,function() {
             console.log(process.pid+' port:'+port+' Listen Start');
         });
-	
-	function sendLogMessage(uid,lang,msg){
-		process.send({'uid':uid,'lang':lang,'msg':msg});
-	}
-	function str2json(str){
-		var ret;
-		try{
-			ret = JSON.parse(str);
+        setInterval(sendConns,10000);
+		function sendConns(){
+			server.getConnections(function(err,count){
+				if(!err){
+					process.send({'type':'conn','pid':process.pid,'count':count});
+				}
+			});
 		}
-		catch(e){
-			ret = null;
+		function sendLogMessage(uid,lang,msg){
+			process.send({'uid':uid,'lang':lang,'msg':msg});
 		}
-		return ret;
-	}
+		function str2json(str){
+			var ret;
+			try{
+				ret = JSON.parse(str);
+			}
+			catch(e){
+				ret = null;
+			}
+			return ret;
+		}
 }
 
 exports.start=start;

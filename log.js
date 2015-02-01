@@ -17,7 +17,7 @@ process.on('message',function(obj){
 
 function wirteLog(){
     var tempBuff=logBuff;
-	logBuff=[]; 
+	logBuff=[];
 	var datePath=getDatePath();
 	var logObj={};
 	for(var i=0;i<tempBuff.length;i++){
@@ -29,7 +29,6 @@ function wirteLog(){
 				if(err){console.log(err)};
 		});
 	}
-	
     setTimeout(wirteLog,LOG_SAVE_DELAY);
 }
 function getLogPath(datePath,lang){
@@ -59,3 +58,4 @@ function getDatePath(){
     var day=date.getDate();
     return year+'_'+month+'_'+day;
 }
+console.log('Log Start');

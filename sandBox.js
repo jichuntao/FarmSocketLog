@@ -14,7 +14,9 @@ var server = net.createServer(function(c) {
   	c.on('data',function(data){
 		c.end(xml);
   	});
-  
+  	c.on('error'),function(err){
+  		console.log(err);
+  	});
 });
 server.listen(843, function() { 
  	console.log('Sandbox Start');
